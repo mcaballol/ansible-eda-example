@@ -1,0 +1,7 @@
+# 00-namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-eda
+  labels:
+    openshift.io/user-monitoring: "true"   # para que Alertmanager UWM acepte AlertmanagerConfig

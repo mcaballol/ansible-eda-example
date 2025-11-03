@@ -1,0 +1,34 @@
+# 50-prometheusrule.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: mini-repo-rules
+  namespace: demo-eda
+spec:
+  groups:
+  - name: mini-repo.rules
+    rules:
+    - alert: TargetDown
+      expr: up{service="mini-repo"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "mini-repo no está siendo scrapeado"
+        description: "El target mini-repo está caído o no responde."
+
+    - alert: HighErrorRate
+      # error_rate = err / (ok + err) > 5% en 5m, y con mínimo de 10 req/min
+      expr: |
+        (sum(rate(app_requests_error_total[5m])) by (job)
+         /
+        clamp_min(sum(rate(app_requests_error_total[5m])) by (job)
+                  + sum(rate(app_requests_ok_total[5m])) by (job), 1e-9)) > 0.05
+        and
+        sum(rate(app_requests_error_total[5m]) + rate(app_requests_ok_total[5m])) by (job) > 10/60
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Error rate elevado en mini-repo"
+        description: "La tasa de error supera 5% en los últimos 5m."

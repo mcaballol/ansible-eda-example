@@ -1,0 +1,16 @@
+# 40-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mini-repo
+  namespace: demo-eda
+  labels:
+    release: user-workload    # en algunos clusters no es necesario; mantenlo si tu operador lo usa
+spec:
+  selector:
+    matchLabels:
+      app: mini-repo
+  endpoints:
+  - port: http
+    interval: 15s
+    path: /metrics

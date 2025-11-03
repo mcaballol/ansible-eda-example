@@ -1,0 +1,26 @@
+# 60-alertmanagerconfig.yaml
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: mini-repo-amcfg
+  namespace: demo-eda
+  labels:
+    alertmanagerConfig: "true"
+spec:
+  route:
+    receiver: ansible-eda
+    group_wait: 10s
+    group_interval: 1m
+    repeat_interval: 30m
+    matchers:
+      - name: severity
+        matchType: =~
+        value: "warning|critical"
+  receivers:
+  - name: ansible-eda
+    webhookConfigs:
+    - url: "https://eda.example.com/webhook/mini-repo"
+      sendResolved: true
+      httpConfig:
+        tlsConfig:
+          insecureSkipVerify: true   # quítalo si usas TLS válido

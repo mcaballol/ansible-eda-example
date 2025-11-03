@@ -1,0 +1,15 @@
+# 20-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mini-repo
+  namespace: demo-eda
+  labels:
+    app: mini-repo
+spec:
+  selector:
+    app: mini-repo
+  ports:
+  - name: http
+    port: 8000
+    targetPort: http

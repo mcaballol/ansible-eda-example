@@ -1,0 +1,14 @@
+# 30-route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: mini-repo
+  namespace: demo-eda
+spec:
+  to:
+    kind: Service
+    name: mini-repo
+  port:
+    targetPort: http
+  tls:
+    termination: edge
