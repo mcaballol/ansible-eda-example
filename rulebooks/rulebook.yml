@@ -10,21 +10,41 @@
 
   rules:
     - name: handle_prom_alert
-      condition: event.payload.status is defined
+      condition: event.payload.status is defined and event.payload.status == "firing"
       actions:
         # - run_playbook:
         #     name: playbooks/handle_alert.yml
         #     extra_vars:
         #       alert: "{{ event.payload }}"
 
-      - run_job_template:
-          name: "Reaccionar a alerta de Prometheus"
-          organization: "Default"
-          job_args:
-            extra_vars:
-              source: "eda-webhook"
-              alert: "{{ event.payload }}"
-              severity: "{{ event.payload.labels.severity }}"
-              alertname: "{{ event.payload.labels.alertname }}"
-              namespace: "{{ event.payload.labels.namespace }}"
-              service: "{{ event.payload.labels.service }}"
+        - run_job_template:
+            name: "Reaccionar a alerta de Prometheus"
+            organization: "Default"
+            job_args:
+              extra_vars:
+                source: "eda-webhook"
+                alert: "{{ event.payload }}"
+                severity: "{{ event.payload.commonLabels.severity | default('unknown') }}"
+                alertname: >-
+                    {{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first).labels.alertname
+                      | default('UnknownAlert') }}
+                namespace: "{{ event.payload.commonLabels.namespace | default('default') }}"
+                service: >-
+                    {{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first).labels.service
+                      | default('') }}
+                payload: "{{ event.payload }}"
+                  # común (viene arriba)
+                  # primer firing (muchas integraciones lo usan)
+                first_firing: "{{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first) | default({}, true) }}"
+
+
+                summary: >-
+                  {{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first).annotations.summary
+                      | default('') }}
+                description: >-
+                  {{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first).annotations.description
+                      | default('') }}
+                generatorURL: >-
+                  {{ (event.payload.alerts | selectattr('status','equalto','firing') | list | first).generatorURL
+                      | default('') }}
+                firing_count: "{{ (event.payload.alerts | selectattr('status','equalto','firing') | list | length) }}"
