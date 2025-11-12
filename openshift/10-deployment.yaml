@@ -16,7 +16,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: app
-        image: <TU_REGISTRY>/mini-repo:latest
+        image: quay.io/mcaballol/mini-repo:latest
         ports:
         - containerPort: 8000
           name: http

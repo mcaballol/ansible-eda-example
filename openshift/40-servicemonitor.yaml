@@ -4,8 +4,6 @@ kind: ServiceMonitor
 metadata:
   name: mini-repo
   namespace: demo-eda
-  labels:
-    release: user-workload    # en algunos clusters no es necesario; mantenlo si tu operador lo usa
 spec:
   selector:
     matchLabels:

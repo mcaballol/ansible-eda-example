@@ -8,14 +8,28 @@ spec:
   groups:
   - name: mini-repo.rules
     rules:
+    # 1) El despliegue "se cae": no hay réplicas disponibles a pesar de que se pidieron >=1
+    - alert: DeploymentDown
+      expr: |
+        (kube_deployment_spec_replicas{namespace="demo-eda",deployment="mini-repo"} >= 1)
+        and on(namespace, deployment)
+        (kube_deployment_status_replicas_available{namespace="demo-eda",deployment="mini-repo"} < 1)
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "mini-repo: despliegue sin réplicas disponibles"
+        description: "El Deployment mini-repo (demo-eda) no tiene pods disponibles a pesar de tener replicas deseadas >=1."
+
+    # 2) El target no se puede scrapear (endpoint /metrics caído o inaccesible)
     - alert: TargetDown
-      expr: up{service="mini-repo"} == 0
+      expr: up{service="mini-repo",namespace="demo-eda"} == 0
       for: 1m
       labels:
         severity: critical
       annotations:
         summary: "mini-repo no está siendo scrapeado"
-        description: "El target mini-repo está caído o no responde."
+        description: "El target mini-repo no responde al endpoint /metrics."
 
     - alert: HighErrorRate
       # error_rate = err / (ok + err) > 5% en 5m, y con mínimo de 10 req/min
