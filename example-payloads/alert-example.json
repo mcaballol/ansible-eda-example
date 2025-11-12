@@ -1,0 +1,16 @@
+{
+  "status": "firing",
+  "labels": {
+    "alertname": "HighErrorRate",
+    "severity": "warning",
+    "namespace": "demo-eda",
+    "service": "mini-repo"
+  },
+  "annotations": {
+    "summary": "High error rate detected",
+    "description": "Error rate is above 5% for the last 5 minutes"
+  },
+  "startsAt": "2024-01-01T12:00:00Z",
+  "endsAt": null
+}
+

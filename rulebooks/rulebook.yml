@@ -18,7 +18,7 @@
         #       alert: "{{ event.payload }}"
 
         - run_job_template:
-          name: "JT - Hello World"
+          name: "Reaccionar a alerta de Prometheus"
           organization: "Default"
           job_args:
             extra_vars:
