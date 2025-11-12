@@ -29,7 +29,7 @@
       ansible.builtin.shell: |
         oc --token {{ token }} --server {{ server }} --insecure-skip-tls-verify={{ insecure }} -n demo-eda patch deployment mini-repo \
         --type='json' \
-        -p='[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"quay.io/mcaballol/mini-repo:v2"}]'
+        -p='[{"op":"replace","path":"/spec/template/spec/containers/0/image","value":"quay.io/mcaballol/mini-repo:latest"}]'
         #oc --token {{ token }} --server {{ server }} --insecure-skip-tls-verify={{ insecure }} rollout restart deploy/mini-repo -n demo-eda
       changed_when: true
       vars:
