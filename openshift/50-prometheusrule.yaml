@@ -14,7 +14,7 @@ spec:
         (kube_deployment_spec_replicas{namespace="demo-eda",deployment="mini-repo"} >= 1)
         and on(namespace, deployment)
         (kube_deployment_status_replicas_available{namespace="demo-eda",deployment="mini-repo"} < 2)
-      for: 1m
+      for: 15s
       labels:
         severity: critical
       annotations:
