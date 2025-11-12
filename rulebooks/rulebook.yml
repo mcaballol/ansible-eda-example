@@ -17,7 +17,7 @@
         #     extra_vars:
         #       alert: "{{ event.payload }}"
 
-        - run_job_template:
+      - run_job_template:
           name: "Reaccionar a alerta de Prometheus"
           organization: "Default"
           job_args:
