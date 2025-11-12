@@ -8,7 +8,7 @@
     - name: Log de la alerta
       ansible.builtin.debug:
         msg: >
-          Recibida alerta {{ alert.source }} - 
+          Recibida alerta {{ source }} - alert: {{ alert }}
      #     en instancia {{ alert.payload.instance }}
 
     # Ejemplos de acciones:
