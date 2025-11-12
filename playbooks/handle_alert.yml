@@ -20,6 +20,6 @@
       vars:
           server: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_HOST') }}"
           token: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
-          insecure: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') }}"
+          insecure: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') | bool }}"
 
 
