@@ -1,16 +1,18 @@
-# rulebook.yml
-sources:
-  - name: alerts
-    ansible.eda.webhook:
-      host: 0.0.0.0
-      port: 5000
-      token: "cambia-este-token"   # opcional: configura el mismo secreto en Alertmanager (Authorization header)
+---
+- name: RB - Webhook Hello World
+  hosts: all
+  sources:
+    - name: alerts
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+        token: "cambia-este-token"   # opcional: configura el mismo secreto en Alertmanager (Authorization header)
 
-rules:
-  - name: handle_prom_alert
-    condition: event.payload.status is defined
-    actions:
-      - run_playbook:
-          name: playbooks/handle_alert.yml
-          extra_vars:
-            alert: "{{ event.payload }}"
+  rules:
+    - name: handle_prom_alert
+      condition: event.payload.status is defined
+      actions:
+        - run_playbook:
+            name: playbooks/handle_alert.yml
+            extra_vars:
+              alert: "{{ event.payload }}"
