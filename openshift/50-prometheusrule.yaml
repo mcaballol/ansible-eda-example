@@ -24,7 +24,7 @@ spec:
     # 2) El target no se puede scrapear (endpoint /metrics caído o inaccesible)
     - alert: TargetDown
       expr: up{service="mini-repo",namespace="demo-eda"} == 0
-      for: 1m
+      for: 15s
       labels:
         severity: critical
       annotations:

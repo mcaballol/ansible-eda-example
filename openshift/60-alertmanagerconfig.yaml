@@ -17,10 +17,17 @@ spec:
         matchType: =~
         value: "warning|critical"
   receivers:
+  # quítalo si usas TLS válido
+  
   - name: ansible-eda
     webhookConfigs:
-    - url: "https://eda.example.com/webhook/mini-repo"
+    - url: "https://aap-aap.apps-crc.testing/eda-event-streams/api/eda/v1/external_event_stream/703efa48-f7b6-4229-95fe-53db03f5b60a/post/"
       sendResolved: true
       httpConfig:
+        authorization:
+          type: "token"                  # <-- esto produce: Authorization: token <cred>
+          credentials:
+            name: eda-webhook-secret     # Secret con el valor
+            key: auth_token
         tlsConfig:
-          insecureSkipVerify: true   # quítalo si usas TLS válido
+          insecureSkipVerify: true

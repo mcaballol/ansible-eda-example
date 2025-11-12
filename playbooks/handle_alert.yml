@@ -12,14 +12,24 @@
      #     en instancia {{ alert.payload.instance }}
 
     # Ejemplos de acciones:
+    - name: Si DeploymentDown crítico, ajustar replicas a 3
+     # when: "(alert.alerts|first).labels.alertname == 'TargetDown' and (alert.alerts|first).labels.severity == 'critical'"
+      when: alertname == 'DeploymentDown'
+      ansible.builtin.shell: |
+        oc --token {{ token }} --server {{ server }} --insecure-skip-tls-verify={{ insecure }} scale deployment mini-repo --replicas=3 -n demo-eda
+      changed_when: true
+      vars:
+        server: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_HOST') }}"
+        token: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
+        insecure: "{{ not(lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') | bool) }}"
+
     - name: Si TargetDown crítico, intentar reiniciar Deployment en OpenShift
+      when: alertname == 'TargetDown'
      # when: "(alert.alerts|first).labels.alertname == 'TargetDown' and (alert.alerts|first).labels.severity == 'critical'"
       ansible.builtin.shell: |
         oc --token {{ token }} --server {{ server }} --insecure-skip-tls-verify={{ insecure }} rollout restart deploy/mini-repo -n demo-eda
       changed_when: true
       vars:
-          server: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_HOST') }}"
-          token: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
-          insecure: "{{ not(lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') | bool) }}"
-
-
+        server: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_HOST') }}"
+        token: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
+        insecure: "{{ not(lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') | bool) }}"

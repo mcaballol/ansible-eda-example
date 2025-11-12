@@ -24,3 +24,7 @@
             extra_vars:
               source: "eda-webhook"
               alert: "{{ event.payload }}"
+              severity: "{{ event.payload.labels.severity }}"
+              alertname: "{{ event.payload.labels.alertname }}"
+              namespace: "{{ event.payload.labels.namespace }}"
+              service: "{{ event.payload.labels.service }}"
