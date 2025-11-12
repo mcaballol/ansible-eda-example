@@ -12,7 +12,15 @@
     - name: handle_prom_alert
       condition: event.payload.status is defined
       actions:
-        - run_playbook:
-            name: playbooks/handle_alert.yml
+        # - run_playbook:
+        #     name: playbooks/handle_alert.yml
+        #     extra_vars:
+        #       alert: "{{ event.payload }}"
+
+        - run_job_template:
+          name: "JT - Hello World"
+          organization: "Default"
+          job_args:
             extra_vars:
-              alert: "{{ event.payload }}"
+              source: "eda-webhook"
+              incoming_payload: "{{ event.payload }}"
