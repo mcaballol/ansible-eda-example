@@ -232,3 +232,4 @@ Puedes extender este playbook para:
 - [Prometheus Operator](https://prometheus-operator.dev/)
 - [Alertmanager Configuration](https://prometheus.io/docs/alerting/latest/configuration/)
 
+
