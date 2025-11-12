@@ -23,4 +23,4 @@
           job_args:
             extra_vars:
               source: "eda-webhook"
-              incoming_payload: "{{ event.payload }}"
+              alert: "{{ event.payload }}"
