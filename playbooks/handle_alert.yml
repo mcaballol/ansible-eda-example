@@ -8,12 +8,12 @@
     - name: Log de la alerta
       ansible.builtin.debug:
         msg: >
-          Recibida alerta {{ alert.status }} - {{ (alert.alerts|first).labels.alertname }}
-          en instancia {{ (alert.alerts|first).labels.instance }}
+          Recibida alerta {{ alert.source }} - 
+     #     en instancia {{ alert.payload.instance }}
 
     # Ejemplos de acciones:
     - name: Si TargetDown crítico, intentar reiniciar Deployment en OpenShift
-      when: "(alert.alerts|first).labels.alertname == 'TargetDown' and (alert.alerts|first).labels.severity == 'critical'"
+     # when: "(alert.alerts|first).labels.alertname == 'TargetDown' and (alert.alerts|first).labels.severity == 'critical'"
       ansible.builtin.shell: |
         oc rollout restart deploy/mini-repo -n demo-eda
       changed_when: true
