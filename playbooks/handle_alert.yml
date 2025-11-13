@@ -8,7 +8,7 @@
     - name: Log de la alerta
       ansible.builtin.debug:
         msg: >
-          Recibida alerta {{ source }} - alert: {{ alert }}
+          Recibida alerta {{ source }} - alertname: {{ alertname }}
      #     en instancia {{ alert.payload.instance }}
 
     # Ejemplos de acciones:
@@ -23,7 +23,7 @@
         token: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
         insecure: "{{ not(lookup('ansible.builtin.env', 'K8S_AUTH_VERIFY_SSL', default='true') | bool) }}"
 
-    - name: Si TargetDown crítico, intentar reiniciar Deployment en OpenShift
+    - name: Si TargetDown crítico, intentar recuperar Deployment en OpenShift
       when: alertname == 'TargetDown'
      # when: "(alert.alerts|first).labels.alertname == 'TargetDown' and (alert.alerts|first).labels.severity == 'critical'"
       ansible.builtin.shell: |
